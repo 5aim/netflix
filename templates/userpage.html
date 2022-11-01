@@ -1,0 +1,196 @@
+<!-- templates/postbox/userpage.html -->
+{% load static %}
+
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %} | {{ user.username }}</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="{% static 'userpageassets/css/main.css' %}"/>
+    <noscript>
+        <link rel="stylesheet" href="{% static 'userpageassets/css/noscript.css' %}"/>
+    </noscript>
+</head>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <div class="inner">
+
+            <!-- Logo -->
+            <a href="/postbox" class="logo">
+                <span class="title">Show me the movie</span>
+            </a>
+
+            <nav>
+                <ul>
+                    <li><a href="#menu">Menu</a></li>
+                </ul>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- Menu -->
+    <nav id="menu">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="/postbox">Home</a></li>
+            <li><a href="/MyReview">My Postbox</a></li>
+{#            <li><a href="/MovieReview">Movie Review</a></li>#}
+        </ul>
+    </nav>
+
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <header>
+                <h1>{{ user.username }}님의 POSTBOX</h1>
+                </br>
+
+                <p>{{ user.bio }}</p>
+                </br>
+
+            </header>
+
+            <section class="tiles">
+
+                {% for favorite in favorite_movie %}
+                <article class="">
+									<span class="image">
+                      <img src="{{ favorite.movie.Poster }}" alt="">
+                   </span>
+                    <a href="/MovieReview/{{ favorite.movie.id }}">
+                        <div class="content"></div>
+                    </a>
+                </article>
+                {% endfor %}
+            </section>
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <hr>
+
+            <h2>나의 영화 기록 남기기</h2>
+
+            <br>
+            <form method="post" action="/MyReview/">
+                {% csrf_token %}
+                <div class="fields">
+                    <div class="field half">
+                        <input type="text" name="movie-name" id="movie-name" placeholder="영화이름"/>
+                        <br>
+                        <select name="my-score" id="my-score">
+                            <option value="">평점</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <textarea name="my-review" id="my-review" placeholder="리뷰"></textarea>
+                    </div>
+                </div>
+                <ul class="actions">
+                    <li><input type="submit" value="기록하기" class="primary"/></li>
+                </ul>
+            </form>
+            <hr>
+            <br>
+            <br>
+            <br>
+
+
+            <section>
+
+                <br>
+                <h3>나의 영화 기록</h3>
+                <br>
+                <br>
+                {% for review in reviews %}
+                    <div class="table-wrapper">
+                        <table>
+                            <div>
+                                <p><span class="image left"><img src="{{ review.link }}"
+                                                                 alt=""/></span>
+                                <h4>{{ review.title }}</h4>
+                                <h6>평점 : {{ review.score }}</h6>
+                                {{ review.review }}
+                                </p>
+
+                                {% if review.author == user %}
+                                    <div style="text-align: left">
+                                        <a href="/MyReview/delete/{{ review.id }}">
+                                            <span class="badge rounded-pill bg-secondary">{{ review.title }} |  삭제하기</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </table>
+                    </div>
+                {% endfor %}
+
+
+                <hr>
+
+                <br>
+                <br>
+
+
+            </section>
+
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+
+        </div>
+    </footer>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'userpageassets/js/jquery.min.js' %}"></script>
+<script src="{% static 'userpageassets/js/browser.min.js' %}"></script>
+<script src="{% static 'userpageassets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'userpageassets/js/util.js' %}"></script>
+<script src="{% static 'userpageassets/js/main.js' %}"></script>
+
+</body>
+</html>
